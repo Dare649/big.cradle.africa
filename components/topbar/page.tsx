@@ -134,7 +134,7 @@ const Topbar = () => {
               />
             </div>
             <div onClick={handleToggleMenu}>
-              <IoMenuSharp size={30} className="text-secondary-1 font-bold"/>
+              <IoMenuSharp size={30} className="text-primary-1 font-bold"/>
             </div>
           </div>
         </div>
