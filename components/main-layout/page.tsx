@@ -3,14 +3,14 @@
 import React, { ReactNode } from "react";
 import Topbar from "@/components/topbar/page";
 import Sidebar from "@/components/sideBar/page";
-import { useCurrentPathHierarchy } from "@/hooks/PathName";
+
 
 interface BusinessLayoutProps {
   children: ReactNode;
 }
 
 const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
-  const { parent } = useCurrentPathHierarchy();
+ 
   return (
     <div className="flex flex-col h-screen">
       <Topbar />
@@ -22,7 +22,7 @@ const BusinessLayout: React.FC<BusinessLayoutProps> = ({ children }) => {
 
         {/* Main Content */}
         <main className="flex-1 lg:ml-[20%] lg:p-10 sm:p-5 sm:mt-20">
-          <h2 className="lg:text-2xl font-bold capitalize text-primary-1">{parent}</h2>
+          
           <div className="mt-5 ">
             {children}
           </div>

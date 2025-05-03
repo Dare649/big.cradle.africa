@@ -200,8 +200,11 @@ const RequestAnalytics = () => {
         {
           label: "View",
           className: "text-primary-1 cursor-pointer",
+          // onClick: (row: any) => {
+          //   router.push(`/business/request-analytics/${row.id}`);
+          // },
           onClick: (row: any) => {
-            router.push(`/request-analytics/${row.id}`);
+            console.log('Clicked row ID:', row.id);
           },
         },
         {
