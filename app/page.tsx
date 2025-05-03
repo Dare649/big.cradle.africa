@@ -1,103 +1,162 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
+import { MdOutlineMail } from "react-icons/md";
+import { GoEye, GoEyeClosed } from "react-icons/go";
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { startLoading, stopLoading } from '@/redux/slice/loadingSlice';
+import { RootState } from '@/redux/store';
+import { signIn } from '@/redux/slice/auth/auth';
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+interface FormState {
+  email: string;
+  password: string;
 }
+
+const Signin = () => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
+  const [formData, setFormData] = useState<FormState>({
+    email: "",
+    password: "",
+  });
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const images = ['/img-1.jpg', '/img-2.jpg', '/img-3.jpg', '/img-4.jpg'];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Handle form input changes
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  // Function to toggle password visibility
+  const togglePasswordVisibility = () => setPasswordVisible((prev) => !prev);
+
+  // Handle sign-in submission
+  const handleSignin = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    // Basic form validation
+    if (!formData.email) {
+      toast.error("Email is required.");
+      return;
+    }
+
+    if (!formData.password) {
+      toast.error("Password is required.");
+      return;
+    }
+
+    dispatch(startLoading());
+
+    try {
+      const result = await dispatch(signIn(formData) as any).unwrap();
+
+      if (result) {
+        toast.success("Sign in successful!");
+        router.push('/dashboard');
+      }
+    } catch (error: any) {
+      if (error.message) {
+        toast.error(error.message);
+      } else {
+        toast.error("Sign-in failed! Please try again.");
+      }
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
+  return (
+    <section className="w-full h-screen flex">
+      {/* Image Section */}
+      <div className="sm:w-0 lg:w-[60%] h-screen relative overflow-hidden">
+        {images.map((src, index) => (
+          <Image
+            key={src}
+            src={src}
+            alt={`Slide ${index}`}
+            fill
+            className={`object-cover absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+            quality={100}
+            priority={index === currentIndex}
+          />
+        ))}
+      </div>
+
+      {/* Form Section */}
+      <div className="sm:w-full lg:w-[40%] h-screen flex items-center justify-center">
+        <div className="w-full max-w-md flex flex-col items-center justify-center p-3">
+          <div className="w-full">
+            <h2 className="text-xl sm:text-2xl text-left font-semibold">
+              Welcome, <br /> Sign in to continue.
+            </h2>
+          </div>
+          <form
+            className="w-full mt-5"
+            onSubmit={handleSignin}
+          >
+            <div className="w-full flex items-center gap-x-2 border-b-2 border-gray-400 focus-within:border-primary-1 lg:p-2 sm:p-1 mb-5">
+              <input
+                type="text"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                className="w-full outline-none border-none bg-transparent"
+              />
+              <MdOutlineMail size={25} className="text-gray-400 font-bold"/>
+            </div>
+            <div className="w-full flex items-center gap-x-2 border-b-2 border-gray-400 focus-within:border-primary-1 lg:p-2 sm:p-1 mb-5">
+              <input
+                type={passwordVisible ? 'text' : 'password'}
+                placeholder="Enter your password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full outline-none border-none bg-transparent"
+              />
+              <div
+                onClick={togglePasswordVisibility}
+                className='cursor-pointer'
+              >
+                {passwordVisible ? (
+                  <GoEye size={25} className="text-gray-400 font-bold"/>
+                ) : (
+                  <GoEyeClosed size={25} className="text-gray-400 font-bold"/>
+                )}
+              </div>
+            </div>
+            <button
+              type='submit'
+              className='w-full bg-primary-1 text-white font-bold capitalize text-center hover:border-2 rounded-lg hover:bg-transparent hover:text-primary-1 hover:border-primary-1 py-5 cursor-pointer'
+              disabled={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Sign In'}
+            </button>
+          </form>
+          <p className='first-letter:capitalize text-gray-500 mt-5 text-center'>don't have an account? <span className='text-primary-1 capitalize font-bold' onClick={() => router.push('/auth/sign-up')}>sign up</span></p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Signin;
