@@ -203,7 +203,7 @@ const Signup = () => {
               )}
             </div>
 
-            <p className='first-letter:capitalize text-tertiary-1 text-center mt-2'>already have an account? <span className='text-primary-1 capitalize font-bold' onClick={() => router.push('/')}>sign in</span></p>
+            <p className='first-letter:capitalize text-tertiary-1 text-center mt-2'>already have an account? <span className='text-primary-1 capitalize font-bold cursor-pointer' onClick={() => router.push('/')}>sign in</span></p>
           </div>
         </div>
       </div>

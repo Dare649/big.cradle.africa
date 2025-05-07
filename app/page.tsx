@@ -152,7 +152,7 @@ const Signin = () => {
               {isLoading ? 'Loading...' : 'Sign In'}
             </button>
           </form>
-          <p className='first-letter:capitalize text-gray-500 mt-5 text-center'>don't have an account? <span className='text-primary-1 capitalize font-bold' onClick={() => router.push('/auth/sign-up')}>sign up</span></p>
+          <p className='first-letter:capitalize text-gray-500 mt-5 text-center'>don't have an account? <span className='text-primary-1 capitalize font-bold cursor-pointer' onClick={() => router.push('/auth/sign-up')}>sign up</span></p>
         </div>
       </div>
     </section>
