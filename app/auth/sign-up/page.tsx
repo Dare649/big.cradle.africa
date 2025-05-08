@@ -126,15 +126,15 @@ const Signup = () => {
       const result = await dispatch(signUp(formData) as any).unwrap();
 
       if (result) {
-        toast.success("Sign in successful!");
+        toast.success(result?.message);
         localStorage.setItem("userEmail", formData.email); // Store email in localStorage
         router.push("/auth/verify-otp"); 
       }
     } catch (error: any) {
-      if (error.message) {
-        toast.error(error.message);
+      if (error?.message) {
+        toast.error(error?.message);
       } else {
-        toast.error("Sign-in failed! Please try again.");
+        toast.error(error?.message);
       }
     } finally {
       dispatch(stopLoading());

@@ -100,12 +100,12 @@ const VeriyOtp = () => {
       {/* Form Section */}
       <div className="w-full h-screen flex items-center justify-center">
         <div className="w-full max-w-md flex flex-col items-center justify-center p-3">
-          <div className="w-40 flex justify-center">
+          <div className="w-[100%] flex justify-center">
             <Image
               src={"/logo.png"}
               alt="User Profile"
-              width={50}
-              height={50}
+              width={100}
+              height={100}
               className="w-full"
               quality={100}
               priority

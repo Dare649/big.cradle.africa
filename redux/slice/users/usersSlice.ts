@@ -45,6 +45,7 @@ interface UsersState {
     Status:  "idle" | "isLoading" | "succeeded" | "failed";
     user: UsersData | null;
     allUsers: UsersData[];
+    businessUsers: UsersData[];
     error: string | null;
 }
 
@@ -60,6 +61,7 @@ const initialState: UsersState = {
     deleteUserStatus: "idle",
     user: null,
     allUsers: [],
+    businessUsers: [],
     error: null,
 };
 
@@ -146,16 +148,17 @@ const userSlice = createSlice({
                 state.error = action.error.message ?? "Failed to get all users by user";
             })
 
+           
             .addCase(getBusinessUsers.pending, (state) => {
                 state.getBusinessUsersStatus = "isLoading";
             })
             .addCase(getBusinessUsers.fulfilled, (state, action) => {
+                state.businessUsers = action.payload;
                 state.getBusinessUsersStatus = "succeeded";
-                state.allUsers = Array.isArray(action.payload) ? action.payload : [];
-            })            
+              })
             .addCase(getBusinessUsers.rejected, (state, action) => {
                 state.getBusinessUsersStatus = "failed";
-                state.error = action.error.message ?? "Failed to get all users by user";
+                state.error = action.error.message ?? "Failed to get request";
             })
 
             // get users 

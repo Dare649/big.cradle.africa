@@ -68,7 +68,7 @@ const Signin = () => {
       const result = await dispatch(signIn(formData) as any).unwrap();
 
       if (result) {
-        toast.success("Sign in successful!");
+        toast.success(result.message);
         
         const userRole = result?.data?.role;
   

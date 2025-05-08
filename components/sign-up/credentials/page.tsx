@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MdOutlineEmail } from "react-icons/md";
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { FaCheckCircle, FaRegCircle } from "react-icons/fa";
+import { MdOutlineEmail } from 'react-icons/md';
+import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import { FaCheckCircle, FaRegCircle } from 'react-icons/fa';
 
 interface Props {
-  formData: any;
+  formData: {
+    email: string;
+    password: string;
+  };
   onChange: (field: string, value: string) => void;
 }
 
@@ -21,6 +24,10 @@ const CredentialDetails: React.FC<Props> = ({ formData, onChange }) => {
     {
       label: 'At least 8 characters',
       isValid: password.length >= 8,
+    },
+    {
+      label: 'A maximum of 15 characters',
+      isValid: password.length > 0 && password.length <= 15,
     },
     {
       label: 'At least one uppercase letter',
@@ -39,42 +46,41 @@ const CredentialDetails: React.FC<Props> = ({ formData, onChange }) => {
   return (
     <div className="space-y-6">
       {/* Email Field */}
-      <div className="w-full flex items-center gap-x-2 border-b-2 border-gray-400 focus-within:border-primary-1 p-2">
-        <MdOutlineEmail size={25} className="text-gray-400" />
+      <div className="flex items-center gap-2 border-b-2 border-gray-300 focus-within:border-primary-1 p-2">
+        <MdOutlineEmail size={20} className="text-gray-400" />
         <input
-          type="text"
+          type="email"
           name="email"
           value={formData.email}
           onChange={(e) => onChange('email', e.target.value)}
-          placeholder="Enter business email"
+          placeholder="Email"
           className="w-full outline-none bg-transparent"
         />
       </div>
 
       {/* Password Field */}
-      <div className="w-full flex items-center gap-x-2 border-b-2 border-gray-400 focus-within:border-primary-1 p-2 relative">
+      <div className="flex items-center gap-2 border-b-2 border-gray-300 focus-within:border-primary-1 p-2">
+        <button type="button" onClick={togglePasswordVisibility}>
+          {passwordVisible ? (
+            <IoEyeOutline size={20} className="text-gray-400" />
+          ) : (
+            <IoEyeOffOutline size={20} className="text-gray-400" />
+          )}
+        </button>
         <input
           type={passwordVisible ? 'text' : 'password'}
           name="password"
           value={formData.password}
           onChange={(e) => onChange('password', e.target.value)}
-          placeholder="Enter password"
+          placeholder="Password"
           className="w-full outline-none bg-transparent"
         />
-        <div onClick={togglePasswordVisibility} className="cursor-pointer absolute right-2 top-1/2 transform -translate-y-1/2">
-          {passwordVisible ? (
-            <IoEyeOutline size={24} className="text-gray-400" />
-          ) : (
-            <IoEyeOffOutline size={24} className="text-gray-400" />
-          )}
-        </div>
       </div>
 
-      {/* Password Requirements */}
-      <div className="text-sm space-y-1">
-        <p className="font-medium text-gray-600">Password must contain:</p>
+      {/* Password Rules */}
+      <div className="space-y-1">
         {passwordRules.map((rule, index) => (
-          <div key={index} className="flex items-center gap-x-2 text-gray-500">
+          <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
             {rule.isValid ? (
               <FaCheckCircle className="text-green-500" />
             ) : (

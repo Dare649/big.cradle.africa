@@ -19,9 +19,9 @@ const Users = () => {
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const router = useRouter(); // Initialize the router
   const dispatch = useDispatch<AppDispatch>();
-  const allUsers = useSelector((state: RootState) =>
-    Array.isArray(state.user?.allUsers) ? state.user.allUsers : []);
-  console.log(allUsers)
+  const businessUsers = useSelector((state: RootState) =>
+    Array.isArray(state.user?.businessUsers) ? state.user.businessUsers : []);
+  console.log(businessUsers)
   const user = useSelector((state: RootState) => state.auth.user);
 
 
@@ -66,7 +66,7 @@ const Users = () => {
       }
     };
   
-    if (!allUsers.length) {
+    if (!businessUsers.length) {
       fetchData();
     }
   }, [dispatch, user?._id]);
@@ -159,7 +159,7 @@ const Users = () => {
           onClick: (row: any) => handleDelete(row.id),
         },
       ],
-      [allUsers]
+      [businessUsers]
     );
 
   // Function to toggle the modal
@@ -221,18 +221,18 @@ const Users = () => {
         ),
       },
     ];
-  }, [allUsers]);
+  }, [businessUsers]);
   
   
 
   // Format user data for the table
   const formatteduser = useMemo(
     () =>
-      allUsers.map((item) => ({
+      businessUsers.map((item) => ({
         ...item,
         id: item._id, // Ensure each row has a unique `id`
       })),
-    [allUsers]
+    [businessUsers]
   );
 
   return (
