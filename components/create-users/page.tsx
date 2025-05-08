@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { startLoading, stopLoading } from '@/redux/slice/loadingSlice';
 import { RootState } from '@/redux/store';
-import { createUser, getAllUser, updateUser } from '@/redux/slice/users/users';
+import { createUser, getAllUser, getBusinessUsers, updateUser } from '@/redux/slice/users/users';
 import ImageUploader from '../image-upload/page';
 import { getSignedInUser } from "@/redux/slice/auth/auth";
 
@@ -148,6 +148,8 @@ const CreateUsers = ({ handleClose, userData }: CreateUsersProps) => {
     
             if (result?.success) {
                 toast.success(userData?._id ? "user analytics updated successfully!" : "user analytics created successfully!");
+                await dispatch(getAllUser());
+                window.location.reload();
                 handleClose();
             } else {
                 throw new Error(result?.message || "Failed to submit form");
@@ -163,7 +165,7 @@ const CreateUsers = ({ handleClose, userData }: CreateUsersProps) => {
     
     
     return (
-        <div className="w-full h-[100vh] flex flex-col">
+        <div className="w-full h-[80vh] flex flex-col">
             <div className="flex items-center justify-between">
                 <h2 className="font-bold lg:text-xl sm:text-lg capitalize">{userData?._id ? "Update user" : "Create user"}</h2>
                 <div onClick={handleClose}>
@@ -242,6 +244,11 @@ const CreateUsers = ({ handleClose, userData }: CreateUsersProps) => {
                             className="w-full bg-transparent outline-none border-2 border-gray-300 focus:border-primary-1 rounded-lg p-2"
                         />
                         {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                        {
+                            userData?._id && (
+                                <p className='text-tertiary-1 font-bold'>Note: Change user password to successfully update user.</p>
+                            )
+                        }
                     </div>
 
                     <div className="mb-3">

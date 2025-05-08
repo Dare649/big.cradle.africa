@@ -10,9 +10,10 @@ import { IoAdd } from "react-icons/io5";
 import Modal from "@/components/modal/page";
 import CreateRequestAnalytics from "@/components/create-request-analytics/page";
 import { startLoading, stopLoading } from "@/redux/slice/loadingSlice";
-import { getAllRequestAnalytics, deleteRequestAnalytics, getRequestAnalytics, updateRequestAnalyticsStatus } from "@/redux/slice/request-analytics/requestAnalytics";
+import { getAllRequestAnalytics, deleteRequestAnalytics, getRequestAnalytics } from "@/redux/slice/request-analytics/requestAnalytics";
 import { getAllCategory } from "@/redux/slice/category/category";
 import { getAllRequestTypes } from "@/redux/slice/request-type/requestType";
+import UpdateStatus from "@/components/status-update/page";
 
 
 const RequestAnalytics = () => {
@@ -25,6 +26,7 @@ const RequestAnalytics = () => {
   );
   const allRequestType = useSelector((state: RootState) => Array.isArray(state.request?.allRequestType) ? state.request.allRequestType : []);
   const allCategory = useSelector((state: RootState) => Array.isArray(state.category?.allCategory) ? state.category.allCategory : []);
+  const [updateStatus, setUpdateStatus] = useState<any>(null);
 
 
   const formatDateTime = (isoString: string | null | undefined): string => {
@@ -45,9 +47,7 @@ const RequestAnalytics = () => {
 
 
   const getRequestTypeName = (requestId: string) => {
-    console.log('Request ID:', requestId);
-    console.log('All Request Types:', allRequestType);
-  
+   
     const requestType = allRequestType.find((p) => p.id === requestId);
   
     if (requestType) {
@@ -109,14 +109,15 @@ const RequestAnalytics = () => {
   };
 
 
-
-  const handleClose = async () => {
-    setOpen(false);
-    setSelectedRow(null);
-
-    // ✅ Ensure table reloads after updating
-    dispatch(getAllRequestAnalytics());
+  const handleStatusUpdate = (row: any) => {
+    setSelectedRow(row);  // Set the row data when clicking a row
+    setUpdateStatus(true); // Show the UpdateStatus modal
   };
+
+  const handleClose = () => {
+    setUpdateStatus(false); // Close the modal
+  };
+
 
   const handleDelete = async (requestId: string) => {
       // Show confirmation toast
@@ -156,43 +157,6 @@ const RequestAnalytics = () => {
       );
   };
 
-  const handleUpdateStatus = async (requestId: string) => {
-      // Show confirmation toast
-      toast.info(
-        <div className="flex flex-col items-center text-center">
-          <p className="mb-4">Are you sure you want to update this request?</p>
-          <div className="flex items-center gap-3">
-            <button
-              className="bg-green-500 text-white px-3 py-1 rounded"
-              onClick={async () => {
-                toast.dismiss(`update-${requestId}`); // Dismiss the confirmation toast
-                dispatch(startLoading());
-                try {
-                  await dispatch(updateRequestAnalyticsStatus(requestId)).unwrap(); // update request by requestId
-                  toast.success("request updated successfully");
-    
-                  // Refetch all request after deletion
-                  await dispatch(getAllRequestAnalytics()).unwrap();
-                } catch (error: any) {
-                  toast.error(error.message || "Failed to update request");
-                } finally {
-                  dispatch(stopLoading());
-                }
-              }}
-            >
-              Yes
-            </button>
-            <button
-              className="bg-gray-300 px-3 py-1 rounded"
-              onClick={() => toast.dismiss(`update-${requestId}`)} // Dismiss the confirmation toast
-            >
-              No
-            </button>
-          </div>
-        </div>,
-        { toastId: `update-${requestId}` } // Unique toastId for each confirmation
-      );
-  };
     
   
     const actions = useMemo(
@@ -200,11 +164,8 @@ const RequestAnalytics = () => {
         {
           label: "View",
           className: "text-primary-1 cursor-pointer",
-          // onClick: (row: any) => {
-          //   router.push(`/business/request-analytics/${row.id}`);
-          // },
           onClick: (row: any) => {
-            console.log('Clicked row ID:', row.id);
+            router.push(`/business/request-analytics/${row.id}`);
           },
         },
         {
@@ -215,7 +176,7 @@ const RequestAnalytics = () => {
         {
           label: "Update status",
           className: "text-green-500 cursor-pointer",
-          onClick: (row: any) => handleUpdateStatus(row.id),
+          onClick: (row: any) => handleStatusUpdate(row),
         },
         {
           label: "Delete",
@@ -318,6 +279,10 @@ const RequestAnalytics = () => {
         <Modal visible={open} onClose={handleOpen}>
           <CreateRequestAnalytics handleClose={handleOpen} requestData={selectedRow}/>
         </Modal>
+      )}
+
+      {updateStatus && selectedRow && (
+        <UpdateStatus data={selectedRow} onClose={handleClose} />
       )}
     </section>
   );

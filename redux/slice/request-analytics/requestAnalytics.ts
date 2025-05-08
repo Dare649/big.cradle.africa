@@ -13,6 +13,11 @@ interface RequestAnalytics {
     data_consent: number;
 }
 
+interface StatusData {
+    status: string;
+    completed_data_file?: string;
+}
+
 export const createRequestAnalytics = createAsyncThunk(
     "requestAnalytics/createRequestAnalytics",
     async (data: RequestAnalytics, { rejectWithValue }) => {
@@ -41,21 +46,6 @@ export const updateRequestAnalytics = createAsyncThunk(
         }
     }
 );
-
-
-// export const updateRequestAnalyticsStatus = createAsyncThunk(
-//     "requestAnalytics/updateRequestAnalyticsStatus",
-//     async ({ id}: { id: string}, { rejectWithValue}) => {
-//         try {
-//             const response = await axiosInstance.put(`/api/v1/request_analytics/update_request_analytics_status/${id}`);
-//             return response.data;
-//         } catch (error: any) {
-//             return rejectWithValue({
-//                 message: error.response?.data?.message || error.message || "Failed to update request type, try again"
-//             });   
-//         }
-//     }
-// );
 
 
 export const getRequestAnalytics = createAsyncThunk(
@@ -123,11 +113,11 @@ export const deleteRequestAnalytics = createAsyncThunk<string, string, { rejectV
     }
 );
 
-export const updateRequestAnalyticsStatus = createAsyncThunk<string, string, { rejectValue: {message: string}}>(
+export const updateRequestAnalyticsStatus = createAsyncThunk(
    "requestAnalytics/updateRequestAnalyticsStatus",
-    async (id, { rejectWithValue }) => {
+    async ({ id, data}: { id: string; data: StatusData}, { rejectWithValue}) => {
         try {
-            await axiosInstance.put(`/api/v1/request_analytics/update_request_analytics_status/${id}`);
+            await axiosInstance.put(`/api/v1/request_analytics/update_request_analytics_status/${id}`, data );
             return id;
         } catch (error: any) {
             return rejectWithValue({

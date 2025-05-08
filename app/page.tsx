@@ -27,7 +27,7 @@ const Signin = () => {
     password: "",
   });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = ['/img-1.jpg', '/img-2.jpg', '/img-3.jpg', '/img-4.jpg'];
+  const images = ['/img-1.jpg', '/img-3.jpg', '/img-4.jpg'];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -69,7 +69,29 @@ const Signin = () => {
 
       if (result) {
         toast.success("Sign in successful!");
-        router.push('/dashboard');
+        
+        const userRole = result?.data?.role;
+  
+        if (!userRole) {
+          toast.error("Unable to determine user role");
+          return;
+        }
+  
+      // Navigate based on role
+      switch (userRole) {
+        case "admin":
+          router.push("/admin/request-analytics");
+          break;
+        case "business":
+          router.push("/business/request-analytics");
+          break;
+        case "user":
+          router.push("/user/request-analytics");
+          break;
+        default:
+          toast.error("Unknown role. Cannot navigate.");
+          break;
+      }
       }
     } catch (error: any) {
       if (error.message) {

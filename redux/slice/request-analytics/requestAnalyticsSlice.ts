@@ -163,9 +163,9 @@ const requestAnalyticsSlice = createSlice({
     state.getRequestAnalyticsByBusinessUserStatus = "isLoading";
 })
 .addCase(getRequestAnalyticsByBusinessUser.fulfilled, (state, action) => {
+    state.allRequestAnalytics = action.payload;
     state.getRequestAnalyticsByBusinessUserStatus = "succeeded";
-    state.request = action.payload;
-})
+  })
 .addCase(getRequestAnalyticsByBusinessUser.rejected, (state, action) => {
     state.getRequestAnalyticsByBusinessStatus = "failed";
     state.error = action.error.message ?? "Failed to get request";

@@ -141,13 +141,13 @@ const Users = () => {
   
     const actions = useMemo(
       () => [
-        {
-          label: "View",
-          className: "text-primary-1 cursor-pointer",
-          onClick: (row: any) => {
-            router.push(`/analytics-types/${row.id}`);
-          },
-        },
+        // {
+        //   label: "View",
+        //   className: "text-primary-1 cursor-pointer",
+        //   onClick: (row: any) => {
+        //     router.push(`/analytics-types/${row.id}`);
+        //   },
+        // },
         {
           label: "Update",
           onClick: (row: any) => handleUpdate(row),

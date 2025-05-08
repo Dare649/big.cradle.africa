@@ -10,11 +10,11 @@ import { MdMergeType } from "react-icons/md";
 import { IoBusinessOutline } from "react-icons/io5";
 
 export const adminNav = [
-    {
-        title: 'dashboard',
-        path: '/dashboard',
-        icon: <LuLayoutDashboard size={25}/>
-    },
+    // {
+    //     title: 'dashboard',
+    //     path: '/dashboard',
+    //     icon: <LuLayoutDashboard size={25}/>
+    // },
 
     {
         title: 'request analytics',
@@ -40,19 +40,19 @@ export const adminNav = [
         icon: <  IoBusinessOutline size={25}/>
     },
 
-    {
-        title: 'settings',
-        path: '/settings',
-        icon: <BiCategoryAlt size={25}/>
-    },
+    // {
+    //     title: 'settings',
+    //     path: '/settings',
+    //     icon: <BiCategoryAlt size={25}/>
+    // },
 ]
 
 export const businessNav = [
-    {
-        title: 'dashboard',
-        path: '/dashboard',
-        icon: <LuLayoutDashboard size={25}/>
-    },
+    // {
+    //     title: 'dashboard',
+    //     path: '/dashboard',
+    //     icon: <LuLayoutDashboard size={25}/>
+    // },
 
     {
         title: 'request analytics',
@@ -66,20 +66,20 @@ export const businessNav = [
         icon: <  LuUserRound size={25}/>
     },
 
-    {
-        title: 'settings',
-        path: '/settings',
-        icon: <BiCategoryAlt size={25}/>
-    },
+    // {
+    //     title: 'settings',
+    //     path: '/settings',
+    //     icon: <BiCategoryAlt size={25}/>
+    // },
 ]
 
 
 export const userNav = [
-    {
-        title: 'dashboard',
-        path: '/dashboard',
-        icon: <LuLayoutDashboard size={25}/>
-    },
+    // {
+    //     title: 'dashboard',
+    //     path: '/dashboard',
+    //     icon: <LuLayoutDashboard size={25}/>
+    // },
 
     {
         title: 'request analytics',
@@ -88,9 +88,9 @@ export const userNav = [
     },
 
 
-    {
-        title: 'settings',
-        path: '/settings',
-        icon: <BiCategoryAlt size={25}/>
-    },
+    // {
+    //     title: 'settings',
+    //     path: '/settings',
+    //     icon: <BiCategoryAlt size={25}/>
+    // },
 ]

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startLoading, stopLoading } from '@/redux/slice/loadingSlice';
 import { RootState } from '@/redux/store';
 import Select from 'react-select';
-import { createRequestAnalytics, getAllRequestAnalytics, updateRequestAnalytics } from '@/redux/slice/request-analytics/requestAnalytics';
+import { createRequestAnalytics, getAllRequestAnalytics, getRequestAnalyticsByBusiness, getRequestAnalyticsByBusinessUser, updateRequestAnalytics } from '@/redux/slice/request-analytics/requestAnalytics';
 import FileUploader from '../file-upload/page';
 import { getSignedInUser } from "@/redux/slice/auth/auth";
 import { getAllRequestTypes } from '@/redux/slice/request-type/requestType';
@@ -85,7 +85,7 @@ const CreateRequestAnalytics = ({ handleClose, requestData }: CreateRequestAnaly
         const fetchData = async () => {
           try {
             dispatch(startLoading());
-            await dispatch(getAllRequestAnalytics()).unwrap();
+            // await dispatch(getAllRequestAnalytics()).unwrap();
             await dispatch(getSignedInUser()).unwrap();
             await dispatch(getAllCategory()).unwrap();
             await dispatch(getAllRequestTypes()).unwrap();
@@ -178,7 +178,7 @@ const CreateRequestAnalytics = ({ handleClose, requestData }: CreateRequestAnaly
                     id: requestData._id,
                     data: formattedData,
                 }) as any).unwrap();
-                dispatch(getAllRequestAnalytics());
+                // dispatch(getAllRequestAnalytics());
             } else {
                 
                 result = await dispatch(createRequestAnalytics(formattedData) as any).unwrap();
@@ -186,6 +186,7 @@ const CreateRequestAnalytics = ({ handleClose, requestData }: CreateRequestAnaly
     
             if (result?.success) {
                 toast.success(requestData?._id ? "request analytics updated successfully!" : "request analytics created successfully!");
+                
                 handleClose();
             } else {
                 throw new Error(result?.message || "Failed to submit form");

@@ -22,7 +22,7 @@ const RequestAnalytics = () => {
   const router = useRouter(); // Initialize the router
   const dispatch = useDispatch<AppDispatch>();
   const allRequestAnalytics = useSelector((state: RootState) =>
-    Array.isArray(state.requestAnalytics?.businessUserAnalytics) ? state.requestAnalytics?.businessUserAnalytics : []
+    Array.isArray(state.requestAnalytics?.allRequestAnalytics) ? state.requestAnalytics?.allRequestAnalytics : []
   );
   const allRequestType = useSelector((state: RootState) => Array.isArray(state.request?.allRequestType) ? state.request.allRequestType : []);
   const allCategory = useSelector((state: RootState) => Array.isArray(state.category?.allCategory) ? state.category.allCategory : []);
@@ -155,16 +155,13 @@ const RequestAnalytics = () => {
 
     const actions = useMemo(
       () => [
-        {
-          label: "View",
-          className: "text-primary-1 cursor-pointer",
-          // onClick: (row: any) => {
-          //   router.push(`/user/request-analytics/${row.id}`);
-          // },
-          onClick: (row: any) => {
-            console.log('Clicked row ID:', row.id);
-          },
-        },
+        // {
+        //   label: "View",
+        //   className: "text-primary-1 cursor-pointer",
+        //   onClick: (row: any) => {
+        //     router.push(`/user/request-analytics/${row.id}`);
+        //   },
+        // },
         {
           label: "Update",
           onClick: (row: any) => handleUpdate(row),

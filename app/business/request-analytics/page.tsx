@@ -155,58 +155,17 @@ const RequestAnalytics = () => {
       );
   };
 
-  const handleUpdateStatus = async (requestId: string) => {
-      // Show confirmation toast
-      toast.info(
-        <div className="flex flex-col items-center text-center">
-          <p className="mb-4">Are you sure you want to update this request?</p>
-          <div className="flex items-center gap-3">
-            <button
-              className="bg-green-500 text-white px-3 py-1 rounded"
-              onClick={async () => {
-                toast.dismiss(`update-${requestId}`); // Dismiss the confirmation toast
-                dispatch(startLoading());
-                try {
-                  await dispatch(updateRequestAnalyticsStatus(requestId)).unwrap(); // update request by requestId
-                  toast.success("request updated successfully");
-    
-                  // Refetch all request after deletion
-                  await dispatch(getRequestAnalyticsByBusiness(String(user?._id))).unwrap();
-                } catch (error: any) {
-                  toast.error(error.message || "Failed to update request");
-                } finally {
-                  dispatch(stopLoading());
-                }
-              }}
-            >
-              Yes
-            </button>
-            <button
-              className="bg-gray-300 px-3 py-1 rounded"
-              onClick={() => toast.dismiss(`update-${requestId}`)} // Dismiss the confirmation toast
-            >
-              No
-            </button>
-          </div>
-        </div>,
-        { toastId: `update-${requestId}` } // Unique toastId for each confirmation
-      );
-  };
-    
   
+    
     const actions = useMemo(
       () => [
-        {
-          label: "View",
-          className: "text-primary-1 cursor-pointer",
-          // onClick: (row: any) => {
-          //   router.push(`/business/request-analytics/${row.id}`);
-          // },
-          onClick: (row: any) => {
-            console.log('Clicked row ID:', row.id);
-          },
-          
-        },
+        // {
+        //   label: "View",
+        //   className: "text-primary-1 cursor-pointer",
+        //   onClick: (row: any) => {
+        //     router.push(`/business/request-analytics/${row.id}`);
+        //   },     
+        // },
         {
           label: "Update",
           onClick: (row: any) => handleUpdate(row),
@@ -313,8 +272,7 @@ const RequestAnalytics = () => {
       {open && (
         <Modal visible={open} onClose={handleOpen}>
           <CreateRequestAnalytics handleClose={handleOpen} requestData={selectedRow}/>
-        </Modal>
-      )}
+        </Modal>      )}
     </section>
   );
 };
